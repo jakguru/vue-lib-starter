@@ -1,0 +1,45 @@
+{
+  "text": "API",
+  "items": [
+    {
+      "text": "@example/lib",
+      "items": [
+        {
+          "text": "Package Exports",
+          "link": "/api/@example/lib/index"
+        },
+        {
+          "text": "Variables",
+          "items": [
+            {
+              "text": "version",
+              "link": "/api/@example/lib/variables/version"
+            }
+          ],
+          "collapsed": true
+        }
+      ],
+      "collapsed": true
+    },
+    {
+      "text": "@example/lib/test",
+      "items": [
+        {
+          "text": "Package Exports",
+          "link": "/api/@example/lib/test/index"
+        },
+        {
+          "text": "Variables",
+          "items": [
+            {
+              "text": "test",
+              "link": "/api/@example/lib/test/variables/test"
+            }
+          ],
+          "collapsed": true
+        }
+      ],
+      "collapsed": true
+    }
+  ]
+}
