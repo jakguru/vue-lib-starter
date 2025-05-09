@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "**/src/**/*.ts",
+    "**/temp-vue/**/*.ts",
+    "**/src/**/*.vue",
+    "**/tests/**/*.ts",
+    "src",
+    "temp-vue",
+    "bin",
+    "tests",
+    "vite.config.mts",
+    "./vite-env.d.ts",
+  ]
+}

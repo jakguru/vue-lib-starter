@@ -2,8 +2,11 @@
   <div class="example-component">
     <h1>Example Component</h1>
     <p>This is an example component.</p>
-    <!-- @slot content of the component -->
-    <slot />
+    <!--
+      @slot content of the component
+      @binding { string } foo just something to bind
+      -->
+    <slot v-bind="{ foo }" />
   </div>
 </template>
 
@@ -12,9 +15,21 @@
  * @module @example/vue-lib/components/example
  */
 import { defineComponent } from "vue";
+import { version } from "../";
 
 /**
  * ExampleComponent is a simple Vue component that displays a title and a paragraph.
+ * @example
+ *
+ * ```vue
+ * <ExampleComponent />
+ * ```
+ *
+ * ::: details Result
+ *
+ * <ExampleComponent />
+ *
+ * :::
  */
 export default defineComponent({
   name: "ExampleComponent",
@@ -57,13 +72,41 @@ export default defineComponent({
   emits: {
     /**
      * Emitted when the button is clicked.
+     * @type { (event: MouseEvent) => void }
+     * @property {MouseEvent} event - The click event.
      */
     click: (event: MouseEvent) => {
       return typeof event !== "undefined";
     },
   },
-  setup() {
-    // Component logic goes here
+  expose: [
+    /**
+     * Just a simple sliver
+     * @public
+     */
+    "foo",
+  ],
+  setup(_props, { expose }) {
+    expose({
+      /**
+       * Just a simple sliver
+       * @public
+       */
+      foo: "bar",
+    });
+    return {
+      foo: "bar",
+      version,
+    };
+  },
+  methods: {
+    /**
+     * Just a simple sliver
+     * @public
+     */
+    baz() {
+      return "bar";
+    },
   },
 });
 </script>

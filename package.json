@@ -22,14 +22,19 @@
   "copyright": "© 2025-present Jak Guru LLC",
   "license": "MIT",
   "devDependencies": {
+    "@babel/parser": "^7.27.2",
+    "@babel/types": "^7.27.1",
     "@inquirer/prompts": "^7.4.1",
     "@nhtio/eslint-config": "^1.20250508.2",
+    "@nhtio/vuetifiable": "^1.20250304.7",
     "@types/cli-color": "^2.0.6",
     "@types/command-line-args": "^5.2.3",
     "@types/command-line-usage": "^5.0.4",
     "@types/node": "^22.5.4",
     "@types/source-map-support": "^0.5.10",
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/compiler-sfc": "^3.5.13",
+    "ast-types": "^0.14.2",
     "cli-color": "^2.0.4",
     "cli-progress": "^3.12.0",
     "eslint": "^9.10.0",
@@ -54,6 +59,7 @@
     "vitest": "^3.1.1",
     "vue": "^3.5.13",
     "vue-docgen-api": "^4.79.2",
+    "vue-template-compiler": "^2.7.16",
     "vue-tsc": "^2.2.10"
   },
   "files": [

@@ -21,9 +21,23 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
+        "paths": {
+            "@/*": [
+                "../../src/*"
+            ],
+            "@example/vue-lib": [
+                "../../src"
+            ],
+            "@example/vue-lib/*": [
+                "../../src/*"
+            ],
+        }
     },
     "include": [
         "./**/*.ts",
-        "./**/*.mts"
+        "./**/*.mts",
+        "../../**/*.ts",
+        "../../**/*.mts",
+        "../../**/*.vue"
     ],
 }

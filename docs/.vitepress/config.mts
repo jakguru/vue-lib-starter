@@ -31,11 +31,24 @@ export default defineConfig({
     socialLinks: [{ icon: 'npm', link: 'https://www.npmjs.com/package/@example/vue-lib' }],
 
     outline: {
-      level: [2, 3],
+      level: [2, 4],
     },
 
     footer: {
       copyright: 'Copyright © 2025-present Jak Guru LLC',
+    },
+  },
+
+  vite: {
+    resolve: {
+      alias: {
+        '@example/vue-lib': resolve(BASE_DIR, 'src'),
+        '@': resolve(BASE_DIR, 'src'),
+      },
+      mainFields: ['module', 'jsnext:main', 'jsnext'],
+    },
+    define: {
+      __VERSION__: JSON.stringify('0.0.1'),
     },
   },
 })

@@ -22,6 +22,10 @@
       "collapsed": true
     },
     {
+      "text": "@example/vue-lib/components/example",
+      "link": "api/@example/vue-lib/components/example"
+    },
+    {
       "text": "@example/vue-lib/test",
       "items": [
         {
