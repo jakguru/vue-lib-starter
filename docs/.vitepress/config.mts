@@ -12,8 +12,8 @@ const sidebarJson = readFileSync(join(DOCS_DIR, '.vitepress', 'sidebar.json'), {
 const sidebar = JSON.parse(sidebarJson)
 
 export default defineConfig({
-  title: '@example/lib',
-  description: 'An example library',
+  title: '@example/vue-lib',
+  description: 'An example Vue + TS Library',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -28,7 +28,7 @@ export default defineConfig({
 
     sidebar: [{ text: 'Quick Start', link: '/quickstart' }, sidebar],
 
-    socialLinks: [{ icon: 'npm', link: 'https://www.npmjs.com/package/@example/lib' }],
+    socialLinks: [{ icon: 'npm', link: 'https://www.npmjs.com/package/@example/vue-lib' }],
 
     outline: {
       level: [2, 3],

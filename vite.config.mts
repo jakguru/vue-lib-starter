@@ -2,18 +2,14 @@ import { defineConfig, loadEnv } from 'vite'
 import { resolve } from 'path'
 import { readFile } from 'fs/promises'
 import { getEntries } from './bin/utils'
+import { default as vue } from '@vitejs/plugin-vue'
+import { libInjectCss } from 'vite-plugin-lib-inject-css'
 import type { UserConfig } from 'vite'
 
-const LIB_NAME = '@example/lib'
+const LIB_NAME = '@example/vue-lib'
 const BASE_DIR = resolve(__dirname)
 const SRC_DIR = resolve(BASE_DIR, 'src')
-const externals = new Set<string>([
-  'node:util',
-  'node:path',
-  'node:url',
-  'node:fs',
-  'node:fs/promises',
-])
+const externals = new Set<string>(['vue'])
 const nonExternal = new Set<string>([])
 
 export default defineConfig(async ({ mode }) => {
@@ -38,16 +34,17 @@ export default defineConfig(async ({ mode }) => {
   }
   const external = Array.from(externals).filter((ext) => !nonExternal.has(ext))
   return {
-    plugins: [],
+    plugins: [vue(), libInjectCss()],
     build: {
       sourcemap: true,
       minify: true,
+      cssCodeSplit: true,
       lib: {
         entry: {
           ...entries,
         },
         name: LIB_NAME,
-        formats: ['es', 'cjs'],
+        formats: ['es'],
         fileName: (format: string, entry: string) => {
           switch (format) {
             case 'es':

@@ -11,7 +11,7 @@ execa('mkdir', ['-p', 'types-temp'], { cwd, stdio: 'inherit' }).then(async () =>
   const distDir = join(cwd, 'dist')
   try {
     console.log(color.blue('Generating Typescript Type Definition files...'))
-    await execa('npx', ['tsc', '--project', 'tsconfig.build.json'], {
+    await execa('npx', ['vue-tsc', '--project', 'tsconfig.build.json'], {
       cwd,
       stdio: 'inherit',
     })
@@ -31,7 +31,7 @@ execa('mkdir', ['-p', 'types-temp'], { cwd, stdio: 'inherit' }).then(async () =>
         }
         const absPath = join(file.parentPath, file.name)
         const relPath = relative(typesDir, absPath)
-        const dstPath = join(distDir, relPath)
+        const dstPath = join(distDir, relPath).replace(/\.vue\.d\.ts$/, '.d.ts')
         const dstDir = dirname(dstPath)
         const src = await readFile(absPath, 'utf-8')
         await execa('mkdir', ['-p', dstDir], {

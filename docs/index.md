@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  name: "@example/lib"
-  tagline: "An example library"
+  name: "@example/vue-lib"
+  tagline: "An example Vue + TS Library"
   actions:
     - theme: brand
       text: Quick Start

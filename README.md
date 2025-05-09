@@ -16,7 +16,7 @@ Provide the script with the answers and let it create the folder and initialise 
 
 ## Customization
 
-You can search and replace all instances of `@example/lib` within the project, but the main files which should be customized are:
+You can search and replace all instances of `@example/vue-lib` within the project, but the main files which should be customized are:
 
 * `./package.json`
 * `./vite.config.mts`

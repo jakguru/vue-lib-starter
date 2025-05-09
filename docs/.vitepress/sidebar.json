@@ -2,18 +2,18 @@
   "text": "API",
   "items": [
     {
-      "text": "@example/lib",
+      "text": "@example/vue-lib",
       "items": [
         {
           "text": "Package Exports",
-          "link": "/api/@example/lib/index"
+          "link": "/api/@example/vue-lib/index"
         },
         {
           "text": "Variables",
           "items": [
             {
               "text": "version",
-              "link": "/api/@example/lib/variables/version"
+              "link": "/api/@example/vue-lib/variables/version"
             }
           ],
           "collapsed": true
@@ -22,18 +22,18 @@
       "collapsed": true
     },
     {
-      "text": "@example/lib/test",
+      "text": "@example/vue-lib/test",
       "items": [
         {
           "text": "Package Exports",
-          "link": "/api/@example/lib/test/index"
+          "link": "/api/@example/vue-lib/test/index"
         },
         {
           "text": "Variables",
           "items": [
             {
               "text": "test",
-              "link": "/api/@example/lib/test/variables/test"
+              "link": "/api/@example/vue-lib/test/variables/test"
             }
           ],
           "collapsed": true

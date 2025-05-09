@@ -39,10 +39,9 @@ readFile(packageJsonPath, 'utf-8').then(async (packageJson) => {
   const exportKeys = Object.keys(entries)
   parsedPackageJson.module = './index.mjs'
   parsedPackageJson.main = './index.cjs'
-  const exports: Record<string, { import: string; require: string; types: string }> = {
+  const exports: Record<string, { import: string; types: string }> = {
     '.': {
       import: './index.mjs',
-      require: './index.cjs',
       types: './index.d.ts',
     },
   }
@@ -51,7 +50,6 @@ readFile(packageJsonPath, 'utf-8').then(async (packageJson) => {
     const exportKey = `./${key}`
     exports[exportKey] = {
       import: `./${key}.mjs`,
-      require: `./${key}.cjs`,
       types: `./${key}.d.ts`,
     }
   })

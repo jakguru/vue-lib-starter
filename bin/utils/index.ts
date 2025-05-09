@@ -2,6 +2,7 @@ import { join } from 'node:path'
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import * as td from 'typedoc'
 import { default as color } from 'cli-color'
+import { processVueEntries } from './components'
 
 export const getEntries = async (SRC_DIR: string, LIB_NAME: string) => {
   const regex = /@module\s+(@?[\w\/.-]+)/gm
@@ -15,7 +16,7 @@ export const getEntries = async (SRC_DIR: string, LIB_NAME: string) => {
       if (!file.isFile()) {
         return
       }
-      if (!file.name.endsWith('.ts')) {
+      if (!file.name.endsWith('.ts') && !file.name.endsWith('.vue')) {
         return
       }
       const absPath = join(file.parentPath, file.name)
@@ -77,11 +78,16 @@ export const makeApiDocs = async (cwd: string, LIB_NAME: string) => {
   // this is where we build the markdown for the docs
   let app: td.Application | undefined
   const entries = await getEntries(join(cwd, 'src'), LIB_NAME)
-  const entryPoints = Object.values(entries)
+  const entryPoints = Object.values(entries).filter((e) => e.endsWith('.ts'))
+  const sidebar = {
+    text: 'API',
+    items: [] as NavItem[],
+  }
   try {
     app = await td.Application.bootstrapWithPlugins(
       {
         entryPoints: entryPoints,
+        tsconfig: join(cwd, 'tsconfig.json'),
         out: join(cwd, 'docs', 'api'),
         plugin: ['typedoc-plugin-markdown'],
         excludePrivate: true,
@@ -107,7 +113,7 @@ export const makeApiDocs = async (cwd: string, LIB_NAME: string) => {
         propertyMembersFormat: 'table',
         typeDeclarationFormat: 'table',
         formatWithPrettier: true,
-        highlightLanguages: ['typescript', 'javascript', 'json'],
+        highlightLanguages: ['typescript', 'javascript', 'json', 'vue'],
         disableSources: true,
         useTsLinkResolution: true,
         includeVersion: false,
@@ -207,7 +213,7 @@ export const makeApiDocs = async (cwd: string, LIB_NAME: string) => {
     app.renderer.postRenderAsyncJobs.push(async (renderer) => {
       // The navigation JSON structure is available on the navigation object.
       // @ts-ignore
-      const navigation = renderer.navigation.map((section) => {
+      sidebar.items = renderer.navigation.map((section) => {
         if (!section.children) {
           return {
             text: section.title,
@@ -227,16 +233,9 @@ export const makeApiDocs = async (cwd: string, LIB_NAME: string) => {
           collapsed: true,
         }
       })
-      const sidebar = {
-        text: 'API',
-        items: [...navigation],
-      }
       if (entryPoints.length === 1) {
         sidebar.items.unshift({ text: 'Package Exports', link: '/api' })
       }
-      const dst = join(cwd, 'docs', '.vitepress', 'sidebar.json')
-      await writeFile(dst, JSON.stringify(sidebar, null, 2))
-      console.log(color.green('Sidebar JSON generated'))
     })
     const convertCustomTag = (tag: td.CommentTag) => {
       const containerType = tag.tag.replace('@', '').trim()
@@ -311,4 +310,14 @@ export const makeApiDocs = async (cwd: string, LIB_NAME: string) => {
     console.error(color.red(`Typedoc exited with an unexpected error`))
     console.error(error)
   }
+  // this is where we create the markdown for the vue components
+  const vueEntries = await processVueEntries(cwd, LIB_NAME, entries)
+  sidebar.items.push(...vueEntries)
+  sidebar.items.sort((a, b) => {
+    return a.text.localeCompare(b.text)
+  })
+
+  const dst = join(cwd, 'docs', '.vitepress', 'sidebar.json')
+  await writeFile(dst, JSON.stringify(sidebar, null, 2))
+  console.log(color.green('Sidebar JSON generated'))
 }
