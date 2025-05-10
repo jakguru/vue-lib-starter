@@ -34,6 +34,7 @@
     "@types/source-map-support": "^0.5.10",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/compiler-sfc": "^3.5.13",
+    "@vue/repl": "^4.5.1",
     "ast-types": "^0.14.2",
     "cli-color": "^2.0.4",
     "cli-progress": "^3.12.0",

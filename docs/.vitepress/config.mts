@@ -26,7 +26,11 @@ export default defineConfig({
       provider: 'local',
     },
 
-    sidebar: [{ text: 'Quick Start', link: '/quickstart' }, sidebar],
+    sidebar: [
+      { text: 'Quick Start', link: '/quickstart' },
+      { text: 'Playground', link: '/playground' },
+      sidebar,
+    ],
 
     socialLinks: [{ icon: 'npm', link: 'https://www.npmjs.com/package/@example/vue-lib' }],
 
@@ -49,6 +53,17 @@ export default defineConfig({
     },
     define: {
       __VERSION__: JSON.stringify('0.0.1'),
+    },
+    ssr: {
+      noExternal: ['@vue/repl'],
+    },
+    server: {
+      fs: {
+        allow: ['../..'],
+      },
+    },
+    optimizeDeps: {
+      exclude: ['@vue/repl'],
     },
   },
 })
