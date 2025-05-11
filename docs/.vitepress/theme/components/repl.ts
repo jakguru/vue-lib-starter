@@ -1,10 +1,8 @@
-import { defineComponent, h, computed, ref, onMounted } from 'vue'
+import { defineComponent, h, computed, ref, shallowRef, onMounted } from 'vue'
 import { Repl, useStore, useVueImportMap } from '@vue/repl'
 import { useData } from 'vitepress'
-import { default as Monaco } from '@vue/repl/monaco-editor'
+import type { default as Monaco } from '@vue/repl/monaco-editor'
 import type { PropType } from 'vue'
-
-const headHTML = ''
 
 declare global {
   interface ImportMeta {
@@ -20,6 +18,10 @@ export const ReadEvalPrintLoop = defineComponent({
     VueRepl: Repl,
   },
   props: {
+    headHTML: {
+      type: String,
+      default: '',
+    },
     imports: {
       type: Object as PropType<Record<string, string>>,
       default: () => ({}),
@@ -34,6 +36,7 @@ export const ReadEvalPrintLoop = defineComponent({
     },
   },
   setup(props) {
+    const headHTML = computed(() => props.headHTML)
     const imports = computed(() => props.imports)
     const importCode = computed(() => props.importCode)
     const useCode = computed(() => props.useCode)
@@ -50,9 +53,10 @@ export const ReadEvalPrintLoop = defineComponent({
     productionMode.value = true
     const hasWindow = ref(false)
     const vitePressData = useData()
+    const editor = shallowRef<typeof Monaco | undefined>(undefined)
     const bindings = computed(() => ({
       store,
-      editor: Monaco,
+      editor: editor.value as typeof Monaco,
       showCompileOutput: false,
       showTsConfig: false,
       showImportMap: true,
@@ -61,7 +65,7 @@ export const ReadEvalPrintLoop = defineComponent({
       layout: 'vertical' as const,
       layoutReverse: true,
       previewOptions: {
-        headHTML,
+        headHTML: headHTML.value,
         customCode: {
           importCode: importCode.value,
           useCode: useCode.value,
@@ -69,9 +73,10 @@ export const ReadEvalPrintLoop = defineComponent({
       },
     }))
     onMounted(() => {
-      if ('undefined' !== typeof window) {
+      import('@vue/repl/monaco-editor').then((mod) => {
+        editor.value = mod.default
         hasWindow.value = true
-      }
+      })
     })
     return () =>
       h(

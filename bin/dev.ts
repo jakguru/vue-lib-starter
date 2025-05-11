@@ -10,7 +10,7 @@ const nodemon = require('nodemon')
 const color = require('cli-color')
 
 const nodemonConfig = {
-  watch: ['src/**/*', 'package.json', 'vite.config.mts'],
+  watch: ['src/**/*', 'package.json', 'vite.config.mts', 'tsconfig.json'],
   ext: 'ts,json,env,scss,vue,md,yml,stub',
   ignore: ['node_modules'],
   exec: 'npx jiti bin/noop.ts',

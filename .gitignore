@@ -9,3 +9,4 @@ docs/.vitepress/dist
 docs/.vitepress/cache
 docs/api/*
 !docs/api/.gitkeep
+docs/public/repl/*

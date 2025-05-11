@@ -16,7 +16,7 @@ const docsSidebarJsonPath = join(cwd, 'docs', '.vitepress', 'sidebar.json')
 
 const nodemonConfig = {
   watch: ['src/**/*', 'package.json', 'vite.config.mts', 'tsconfig.json'],
-  ext: 'ts,json,env,scss,vue,md,yml',
+  ext: 'ts,json,env,scss,vue,md,yml,stub',
   ignore: ['node_modules'],
   exec: 'npx jiti bin/noop.ts',
   delay: '2500',

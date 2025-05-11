@@ -1,0 +1,17 @@
+---
+layout: doc
+aside: false
+lastUpdated: false
+footer: false
+---
+
+<script setup>
+const headHTML = {{headHTML}}
+const importMap = {{importMap}}
+</script>
+
+# Playground
+
+-----
+
+<ReadEvalPrintLoop :imports="importMap" :headHTML="headHTML" />

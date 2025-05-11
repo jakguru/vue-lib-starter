@@ -54,7 +54,7 @@ export default defineComponent({
     propComplexDefault: {
       type: Array,
       default: () => {
-        if (typeof window === "function") {
+        if (typeof version === "string") {
           return [];
         } else {
           return undefined;
@@ -76,6 +76,14 @@ export default defineComponent({
      * @property {MouseEvent} event - The click event.
      */
     click: (event: MouseEvent) => {
+      return typeof event !== "undefined";
+    },
+    /**
+     * Emitted when the button is right-clicked.
+     * @type { (event: MouseEvent) => void }
+     * @property {MouseEvent} event - The right-click event.
+     */
+    contextmenu: (event: MouseEvent) => {
       return typeof event !== "undefined";
     },
   },
@@ -115,6 +123,7 @@ export default defineComponent({
 .example-component {
   h1 {
     font-weight: bold;
+    color: #17335b;
   }
 }
 </style>

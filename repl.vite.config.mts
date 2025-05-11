@@ -34,11 +34,11 @@ export default defineConfig(async ({ mode }) => {
   }
   const external = Array.from(externals).filter((ext) => !nonExternal.has(ext))
   return {
-    plugins: [vue(), libInjectCss()],
+    plugins: [vue()],
     build: {
       sourcemap: true,
       minify: true,
-      cssCodeSplit: true,
+      cssCodeSplit: false,
       lib: {
         entry: {
           ...entries,
