@@ -9,6 +9,8 @@ import { makeApiDocs, makePlaygroundMd } from './utils/'
 import type { ResultPromise } from 'execa'
 import type { FSWatcher } from 'node:fs'
 
+const args = process.argv.slice(2)
+
 interface ChangedRecord {
   relative: string
   absolute: string
@@ -50,7 +52,10 @@ const readPackageJson = async () => {
 }
 
 const startDevDocs = () => {
-  subprocess = execa('npm', ['run', 'docs:dev'], {
+  if (subprocess) {
+    return
+  }
+  subprocess = execa('npm', ['run', 'docs:dev', ...args], {
     cwd,
     cancelSignal: controller.signal,
     stdio: 'overlapped',
@@ -78,6 +83,7 @@ const restartDevDocs = async () => {
     subprocess.kill('SIGINT')
     await subprocess
     subprocess = undefined
+    await new Promise((doAwait) => setTimeout(doAwait, 1000, void 0))
   }
   logger.info(color.cyan('Starting new VitePress Process'))
   startDevDocs()
