@@ -3,14 +3,11 @@
 import { Logger } from '@nhtio/logger'
 import { execa } from 'execa'
 import { resolve, join, relative } from 'node:path'
-import { readFile, cp, mkdir, writeFile } from 'node:fs/promises'
+import { readFile, cp, mkdir } from 'node:fs/promises'
 import { watch } from 'node:fs'
-import { getEntries, makeApiDocs } from './utils/'
-import { default as Mustache } from 'mustache'
+import { makeApiDocs, makePlaygroundMd } from './utils/'
 import type { ResultPromise } from 'execa'
 import type { FSWatcher } from 'node:fs'
-
-Mustache.escape = (text: string) => text
 
 interface ChangedRecord {
   relative: string
@@ -26,8 +23,6 @@ const packageJsonPath = resolve(cwd, 'package.json')
 const viteConfigPath = resolve(cwd, 'vite.config.mts')
 const tsConfigPath = resolve(cwd, 'tsconfig.json')
 const docsSidebarJsonPath = join(cwd, 'docs', '.vitepress', 'sidebar.json')
-const playgroundMdStubPath = join(cwd, 'bin', 'stubs', 'playground.md.stub')
-const playgroundMdPath = join(cwd, 'docs', 'playground.md')
 
 const matchers = [
   (v: string) => v === 'vite.config.mts',
@@ -52,26 +47,6 @@ const readPackageJson = async () => {
   } catch {
     throw new Error('Unable to parse package.json')
   }
-}
-
-const makePlaygroundMd = async (LIB_NAME: string) => {
-  const entries = await getEntries(join(cwd, 'src'), LIB_NAME)
-  const importMap: Record<string, string> = {}
-  const exportKeys = Object.keys(entries)
-  exportKeys.forEach((key) => {
-    if (key === 'index') {
-      importMap[LIB_NAME] = `/repl/${LIB_NAME}/index.mjs`
-    } else {
-      importMap[`${LIB_NAME}/${key}`] = `/repl/${LIB_NAME}/${key}.mjs`
-    }
-  })
-  const headHTML = `<link rel="stylesheet" href="/repl/${LIB_NAME}/style.css" />`
-  const playgroundMdStub = await readFile(playgroundMdStubPath, 'utf-8')
-  const playgroundMd = Mustache.render(playgroundMdStub, {
-    importMap: JSON.stringify(importMap),
-    headHTML: `'${headHTML.replace(/\"/g, '\\"')}'`,
-  })
-  await writeFile(playgroundMdPath, playgroundMd)
 }
 
 const startDevDocs = () => {
@@ -133,7 +108,7 @@ const processChanges = async (starting: boolean = false) => {
     await cp(join(cwd, 'dist'), replDir, {
       recursive: true,
     })
-    await makePlaygroundMd(parsedPackageJson.name)
+    await makePlaygroundMd(cwd, parsedPackageJson.name)
     restartDevDocs()
   } catch (error) {
     if (error instanceof Error) {

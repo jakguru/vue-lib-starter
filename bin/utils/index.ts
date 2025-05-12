@@ -3,6 +3,9 @@ import { readFile, readdir, writeFile } from 'node:fs/promises'
 import * as td from 'typedoc'
 import { default as color } from 'cli-color'
 import { processVueEntries } from './components'
+import { default as Mustache } from 'mustache'
+
+Mustache.escape = (text: string) => text
 
 export const getEntries = async (SRC_DIR: string, LIB_NAME: string) => {
   const regex = /@module\s+(@?[\w\/.-]+)/gm
@@ -337,4 +340,26 @@ export const makeApiDocsProjectForEntrypoints = async (
   })
   const project = await app.convert()
   return { app, project }
+}
+
+export const makePlaygroundMd = async (cwd: string, LIB_NAME: string) => {
+  const playgroundMdStubPath = join(cwd, 'bin', 'stubs', 'playground.md.stub')
+  const playgroundMdPath = join(cwd, 'docs', 'playground.md')
+  const entries = await getEntries(join(cwd, 'src'), LIB_NAME)
+  const importMap: Record<string, string> = {}
+  const exportKeys = Object.keys(entries)
+  exportKeys.forEach((key) => {
+    if (key === 'index') {
+      importMap[LIB_NAME] = `/repl/${LIB_NAME}/index.mjs`
+    } else {
+      importMap[`${LIB_NAME}/${key}`] = `/repl/${LIB_NAME}/${key}.mjs`
+    }
+  })
+  const headHTML = `<link rel="stylesheet" href="/repl/${LIB_NAME}/style.css" />`
+  const playgroundMdStub = await readFile(playgroundMdStubPath, 'utf-8')
+  const playgroundMd = Mustache.render(playgroundMdStub, {
+    importMap: JSON.stringify(importMap),
+    headHTML: `'${headHTML.replace(/\"/g, '\\"')}'`,
+  })
+  await writeFile(playgroundMdPath, playgroundMd)
 }

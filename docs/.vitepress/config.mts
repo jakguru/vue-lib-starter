@@ -55,7 +55,7 @@ export default defineConfig({
       __VERSION__: JSON.stringify('0.0.1'),
     },
     ssr: {
-      noExternal: ['@vue/repl'],
+      noExternal: ['@vue/repl', 'monaco-editor-core'],
     },
     server: {
       fs: {

@@ -96,6 +96,14 @@ export default defineConfig(async ({ mode }) => {
         '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*',
         '**/.gitlab-ci-local/**',
       ],
+      browser: {
+        provider: 'playwright',
+        enabled: true,
+        headless: process.env.CI ? true : false,
+        instances: process.env.CI
+          ? [{ browser: 'chromium' }, { browser: 'firefox' }, { browser: 'webkit' }]
+          : [{ browser: 'chromium' }],
+      },
     },
   } as UserConfig
 })

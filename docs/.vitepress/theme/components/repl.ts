@@ -1,7 +1,8 @@
-import { defineComponent, h, computed, ref, shallowRef, onMounted } from 'vue'
+import { defineComponent, h, computed, ref, shallowRef, onMounted, watch } from 'vue'
 import { Repl, useStore, useVueImportMap } from '@vue/repl'
 import { useData } from 'vitepress'
 import type { default as Monaco } from '@vue/repl/monaco-editor'
+import { default as CodeMirror } from '@vue/repl/codemirror-editor'
 import type { PropType } from 'vue'
 
 declare global {
@@ -53,16 +54,16 @@ export const ReadEvalPrintLoop = defineComponent({
     productionMode.value = true
     const hasWindow = ref(false)
     const vitePressData = useData()
-    const editor = shallowRef<typeof Monaco | undefined>(undefined)
+    const editor = shallowRef<typeof Monaco | typeof CodeMirror | undefined>(undefined)
     const bindings = computed(() => ({
       store,
       editor: editor.value as typeof Monaco,
       showCompileOutput: false,
-      showTsConfig: false,
+      showTsConfig: true,
       showImportMap: true,
       clearConsole: false,
       theme: vitePressData.isDark.value ? ('dark' as const) : ('light' as const),
-      layout: 'vertical' as const,
+      layout: 'horizontal' as const,
       layoutReverse: true,
       previewOptions: {
         headHTML: headHTML.value,
@@ -73,7 +74,7 @@ export const ReadEvalPrintLoop = defineComponent({
       },
     }))
     onMounted(() => {
-      import('@vue/repl/monaco-editor').then((mod) => {
+      import('@vue/repl/codemirror-editor').then(async (mod) => {
         editor.value = mod.default
         hasWindow.value = true
       })
@@ -85,7 +86,7 @@ export const ReadEvalPrintLoop = defineComponent({
           class: 'docs-repl',
           style: {
             width: '100%',
-            height: '120dvh',
+            height: '60dvh',
             marginTop: '10px',
             border: 'solid 1px var(--vp-c-text-3)',
           },
