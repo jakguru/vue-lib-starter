@@ -72,6 +72,7 @@ export default defineConfig(async ({ mode }) => {
       alias: {
         [LIB_NAME]: resolve(BASE_DIR, 'src'),
         '@': resolve(BASE_DIR, 'src'),
+        'vue': 'vue/dist/vue.esm-bundler.js',
       },
       mainFields: ['module', 'jsnext:main', 'jsnext'],
     },

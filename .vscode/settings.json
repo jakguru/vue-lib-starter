@@ -10,4 +10,5 @@
   },
   "eslint.useFlatConfig": true,
   "eslint.debug": true,
+  "vitest.cliArguments": "--browser=chromium --browser.headless",
 }
